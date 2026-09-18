@@ -1,0 +1,31 @@
+package com.careerlink.auth_service.controller;
+
+import com.careerlink.auth_service.dto.AuthRequest;
+import com.careerlink.auth_service.dto.AuthResponse;
+import com.careerlink.auth_service.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "auth-controller-pong";
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody AuthRequest req, @RequestParam String role) {
+        return ResponseEntity.ok(authService.signup(req.getEmail(), req.getPassword(), role));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) {
+        return ResponseEntity.ok(authService.login(req.getEmail(), req.getPassword()));
+    }
+}
